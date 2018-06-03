@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CSUMB CST205 Image Manipulation Gallery</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/../cover.css" rel="stylesheet">
+
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">I<em>am</em>T<small>CST 205</small></h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="/csumb/cst205">Home</a></li>
+                  <li role="presentation" class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week One<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="rose.html">Rose-Colored Glasses</a></li>
+                        <li><a href="negative.html">Negative Image</a></li>
+                        <li><a href="black-white.html">Better Black and White</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Two<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="bottom-top.html">Bottom-Top Mirror</a></li>
+                        <li><a href="shrink.html">Shrink Image</a></li>
+                        <li><a href="collage.html">Collage</a></li>
+                        <li><a href="red-eye.html">Red-Eye Reduction</a></li>
+                        <li><a href="artify.html">Color Artify</a></li> 
+                        <li><a href="green-screen.html">Green Screen</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown active">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Three<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="thanksgiving.html">Homemade Thanksgiving Card</a></li>
+                        <li class="active"><a href="line-drawing.html">Black & White Line Drawing</a></li>
+                      </ul>                   
+                   </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+
+          <div class ="container-fluid">
+            <h1>Black & White Line Drawing</h1>
+            <p class="lead">
+               This function takes a color picture (works best with multitude of colors) and turns it  black and white as well as into line art. Part
+               of the lumninance check is using formula R*0.299 + G*0.587 + B*0.114 for the respective red, green, and blue values. I broke down the problem into
+               two parts, changing the color to black and white and then making the line art. About half way through when I got to the luminance part (because I
+               took care of the edge cases first as you can see below) I realized I didn't need two separate functions so I combined them. 
+               <br><br>To work on edge cases, I made sure to get the actual height and width minus 1 (since height of 200 will show pixels 0-199 ex) as well as to exclude
+               the right most and bottom row of pixels since they would not have anything to compare to. Once that aspect was managed, I just had to check the luminance
+               and decide what "large enough" of a difference gave the desired effect. I tested this first with simple colored vector line art to get a feel for what
+               direction my values should go before using a regular image of myself and then finding a more colorful image to further demonstrate the line drawing features.
+               Figuring out the correct balance was tedious but with a lot of guess and check and followup math corrections, I was able to get a distance snapshot. Overally, it took about 
+               an hour and a half to complete. 
+               
+            </p>
+             <div class="row">
+               <div class="col-xs-12 col-md-6">
+                  <h2>Before Picture:</h2>
+                  <img src="images/lineDraw-before.jpg" class="img-responsive img-thumbnail" alt="Before Image - Line Drawing">               
+               </div> 
+               <div class="col-xs-12 col-md-6">
+                 <h2>After Picture:</h2>
+                  <img src="images/lineDraw-after.jpg" class="img-responsive img-thumbnail" alt="After Image - Line Drawing">               
+               </div>
+             </div> 
+             <div class="row">
+                <h2>Code:</h2> 
+                <pre class="pre-scrollable">
+                  def lineDraw():
+                  #work through function except for rightmost and bottommost pixels
+                  #hence the -1 to get the true width and height and then -1 again in the if
+                  #statement to get the pixels right before going out of bounds as well as
+                  #since they won't have any comparison pixels turn them white
+                    orig = makePicture(pickAFile()) #select color photo
+                    width = getWidth(orig)-1
+                    height = getHeight(orig)-1
+                    for x in range(0, width):
+                      for y in range(0, height):
+                        p = getPixel(orig, x, y) #current
+                        if (x == width-1): #rightmost pixels
+                          setColor(p, white)
+                        if (y == height-1): #bottom row pixels
+                          setColor(p, white)
+                        else:
+                        #now that we have gotten through pixels that must turn white
+                        #we need to get the luminance of remaining and see if they 
+                        #need to be turned black or white.
+                          pR = getPixel(orig, x+1, y) #right
+                          pB = getPixel(orig, x, y+1)  #below
+                          old = getRed(p)*.299 + getGreen(p)*.587 + getBlue(p)*.114
+                          lumR = getRed(pR)*.299 + getGreen(pR)*.587 + getBlue(pR)*.114
+                          lumB = getRed(pB)*.299 + getGreen(pB)*.587 + getBlue(pB)*.114        
+                          if (abs(old-lumR)>5 and abs(old-lumB)>5):
+                            setColor(p, black)
+                          else:
+                            setColor(p, white)
+                    return orig
+                </pre>
+             </div>
+           </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>
+               &middot; Made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by Talanda featuring <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> &middot;
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

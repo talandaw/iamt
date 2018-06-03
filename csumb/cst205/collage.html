@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CSUMB CST205 Image Manipulation Gallery</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/../cover.css" rel="stylesheet">
+
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">I<em>am</em>T<small>CST 205</small></h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="/csumb/cst205">Home</a></li>
+                  <li role="presentation" class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week One<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="rose.html">Rose-Colored Glasses</a></li>
+                        <li><a href="negative.html">Negative Image</a></li>
+                        <li><a href="black-white.html">Better Black and White</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown active">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Two<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="bottom-top.html">Bottom-Top Mirror</a></li>
+                        <li><a href="shrink.html">Shrink Image</a></li>
+                        <li class="active"><a href="collage.html">Collage</a></li>
+                        <li><a href="red-eye.html">Red-Eye Reduction</a></li>
+                        <li><a href="artify.html">Color Artify</a></li> 
+                        <li><a href="green-screen.html">Green Screen</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown ">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Three<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="thanksgiving.html">Homemade Thanksgiving Card</a></li>
+                        <li><a href="line-drawing.html">Black & White Line Drawing</a></li>
+                      </ul>                   
+                   </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+
+          <div class ="container-fluid">
+            <h1>Collage of Images</h1>
+            <p class="lead">
+               This function actually uses a combination of the functions from earlier in the week (2) as well as the prior week (1).
+               There is no before image, because it is merely a collection of different sized regular images. The collage function itself
+               simply fits the images onto their sections (5x7 image split into 8s) but it calls various functions to resize and skew the image
+               as well as add a filter. This collage took multiple hours to properly configure and troubleshoot, but it was great to complete it.
+            </p>
+             <div class="row">
+               <div>
+                 <h2>After Picture:</h2>
+                  <img src="images/collage.jpg" class="img-responsive img-thumbnail" alt="Collage After Creation">               
+               </div>
+             </div> 
+             <div class="row">
+                <h2>Code:</h2> 
+                <pre class="pre-scrollable">  
+                  def makeCollage():
+                  #I started with a blank empty 5x7 image but then wanted to use a nice background
+                  #collage is equal 8 slices, 525 x 750 for this 2100x1500 background img8 
+                  #to get the same results as me, please use the images by their numbers in the zip
+                    file = pickAFile()
+                    newPic = makePicture(file) #background image 8
+                    newPic = pyCopy(fitSlice(roseColoredGlasses()), newPic, 0,0) #img1
+                    newPic = pyCopy(fitSlice(rotatePic()), newPic, 525,0) #img4
+                    newPic = pyCopy(fitSlice(halfBetter()), newPic, 1050,0) #img3
+                    newPic = pyCopy(fitSlice(lightenUp()), newPic, 1575,0) #img2
+                    newPic = pyCopy(fitSlice(vertFlip()), newPic, 0,750) #img6
+                    newPic = pyCopy(fitSlice(makeNegative()), newPic, 525,750) #img5  
+                    newPic = pyCopy(fitSlice(quadFlip()), newPic, 1050,750) #img9 
+                    newPic = pyCopy(fitSlice(BnW()), newPic, 1575,750) #img7           
+                    show(newPic)
+                    writePictureTo(newPic, folder+"Collage.jpg")
+
+                  def fitSlice(org):
+                  #this function keeps the original if it fits within the slice
+                  #if it does not, it takes skews the picture to best fit within
+                  #with a max of 525 X 750 to fit within 8 pieces of the 5x7 collage
+                  #and fits the image to the correct size without blank white space 
+                    origHeight = getHeight(org)
+                    origWidth = getWidth(org)
+                    if(origWidth > 525):
+                      xStep = origWidth/525.0
+                      newWidth = 525
+                    else:
+                      xStep = 1
+                      newWidth = origWidth
+
+                    if(origHeight > 750):
+                      yStep = origHeight/750.0
+                      newHeight = 750  
+                    else:
+                      yStep = 1
+                      newHeight = origHeight
+
+                    skewed = makeEmptyPicture(newWidth,newHeight)
+                    for x in range (0, origWidth, int(xStep)):
+                      for y in range (0, origHeight, int(yStep)):
+                        setColor(getPixel(skewed, int(x/xStep), int(y/yStep)), getColor(getPixel(org, x, y)))
+                    return skewed
+
+                  def pyCopy(source, target, targetX, targetY):
+                  #edited from simple Copy to center onto specified collage
+                  #it seemed smarter to consolidate into one function rather
+                  #than making another one just to center it and use this as originally made
+                    origWidth = getWidth(source)
+                    origHeight = getHeight(source)
+                    if(origWidth &lt; 525):
+                      xCenter = (525 - origWidth)/2
+                    else:
+                      xCenter = 0
+                    if(origHeight &lt; 750):
+                      yCenter = (750 - origHeight)/2
+                    else:
+                      yCenter = 0
+
+                    for x in range (0, getWidth(source)):
+                      for y in range (0, getHeight(source)):
+                        setColor(getPixel(target, targetX + x +xCenter, targetY + y + yCenter), getColor(getPixel(source, x, y)))
+                    return target
+                    
+                  #PREVIOUS LAB FUNCTIONS BELOW
+                  #slightly edited so they all prompt for a picture selection
+                  #but also so they take no arguments and just return the changes
+                  #so it can easily be placed in the collage. 
+
+                  def halfBetter():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    for x in range(getWidth(pic)/2, getWidth(pic)):
+                      for y in range(0, getHeight(pic)):
+                        p = getPixel(pic, x, y)
+                        color = getColor(p)
+                        newColor = makeLighter(color)
+                        setColor(p, newColor)
+                    return pic
+
+                  def vertFlip():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    for x in range (0, getWidth(pic)/2):
+                      for y in range(0, getHeight(pic)):
+                        p = getPixel(pic, x, y)
+                        newP = getPixel(pic, (getWidth(pic)- 1 - x), y)
+                        color = getColor(p)
+                        setColor(newP, color)
+                    return pic
+
+                  def horzFlip():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    for x in range (0, getWidth(pic)):
+                      for y in range(0, getHeight(pic)/2):
+                        p = getPixel(pic, x, y)
+                        newP = getPixel(pic,x,(getHeight(pic)- 1 - y))
+                        color = getColor(p)
+                        setColor(newP, color)
+                    return pic
+
+                  def horzBottomFlip():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    for x in range (0, getWidth(pic)):
+                      for y in range(getHeight(pic)/2, getHeight(pic)):
+                        p = getPixel(pic, x, y)
+                        newP = getPixel(pic,x,(getHeight(pic)- 1 - y))
+                        color = getColor(p)
+                        setColor(newP, color)
+                    return pic
+
+                  def quadFlip():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    for x in range (0, getWidth(pic)):
+                      for y in range(0, getHeight(pic)/2):
+                        p = getPixel(pic, x, y)
+                        newP = getPixel(pic,x,(getHeight(pic)- 1 - y))
+                        color = getColor(p)
+                        setColor(newP, color)    
+                    for x in range (0, getWidth(pic)/2):
+                      for y in range(0, getHeight(pic)):
+                        p = getPixel(pic, x, y)
+                        newP = getPixel(pic, (getWidth(pic)- 1 - x), y)
+                        color = getColor(p)
+                        setColor(newP, color)
+                    return pic
+
+                  def rotatePic():
+                    file = pickAFile()
+                    picture = makePicture(file)
+                    newPic = makeEmptyPicture(getHeight(picture),getWidth(picture))
+                    for x in range (0, getWidth(picture)):
+                      for y in range (0, getHeight(picture)):
+                        setColor(getPixel(newPic, y, x), getColor(getPixel(picture, x, y)))
+                    return newPic
+
+
+                  def shrink():
+                    file = pickAFile()
+                    picture = makePicture(file)
+                    width = int(getWidth(picture)/2.0 +.5)
+                    height = int(getHeight(picture)/2.0 +.5)
+                    newPic = makeEmptyPicture(width, height)
+                    for x in range (0, getWidth(picture), 2):
+                      for y in range (0, getHeight(picture), 2):
+                        setColor(getPixel(newPic, x/2, y/2), getColor(getPixel(picture, x, y)))
+                    return newPic
+
+                  def roseColoredGlasses():
+                  #based on ratio of rose pink rgb of 255, 0, 127
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    pixels = getPixels(pic)
+                    for p in pixels:
+                      r = getRed(p)
+                      setGreen(p, 0) 
+                      setBlue(p, r *.5) #50% reduction of what red was
+                    return pic
+
+                  def lightenUp():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    pixels = getPixels(pic)
+                    for p in pixels:
+                      color = getColor(p)
+                      newColor = makeLighter(color)
+                      setColor(p, newColor)
+                    return pic
+
+                  def makeNegative():  
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    pixels = getPixels(pic)
+                    for p in pixels:
+                      r = getRed(p)
+                      g = getGreen(p)
+                      b = getBlue(p)
+                      setRed(p, 255 - r)
+                      setGreen(p, 255 - r)
+                      setBlue(p, 255 - r) 
+                    return pic
+
+                  def BnW():
+                    file = pickAFile()
+                    pic = makePicture(file)
+                    pixels = getPixels(pic)
+                    for p in pixels:
+                      r = getRed(p) *.299
+                      g = getGreen(p) *.587
+                      b = getBlue(p) *.114
+                      setRed(p, r+g+b)
+                      setGreen(p, r+g+b)
+                      setBlue(p, r+g+b) 
+                    return pic
+
+                </pre>
+             </div>
+           </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>
+               &middot; Made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by Talanda featuring <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> &middot;
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

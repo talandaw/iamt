@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CSUMB CST205 Image Manipulation Gallery</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/../cover.css" rel="stylesheet">
+
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">I<em>am</em>T<small>CST 205</small></h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="/csumb/cst205">Home</a></li>
+                  <li role="presentation" class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week One<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="rose.html">Rose-Colored Glasses</a></li>
+                        <li><a href="negative.html">Negative Image</a></li>
+                        <li><a href="black-white.html">Better Black and White</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown active">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Two<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="bottom-top.html">Bottom-Top Mirror</a></li>
+                        <li class="active"><a href="shrink.html">Shrink Image</a></li>
+                        <li><a href="collage.html">Collage</a></li>
+                        <li><a href="red-eye.html">Red-Eye Reduction</a></li>
+                        <li><a href="artify.html">Color Artify</a></li> 
+                        <li><a href="green-screen.html">Green Screen</a></li>
+                      </ul>                   
+                   </li>
+                  <li role="presentation" class="dropdown ">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Week Three<span class="caret"></span>
+                      </a>
+                        <ul class="dropdown-menu">
+                        <li><a href="thanksgiving.html">Homemade Thanksgiving Card</a></li>
+                        <li><a href="line-drawing.html">Black & White Line Drawing</a></li>
+                      </ul>                   
+                   </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+
+          <div class ="container-fluid">
+            <h1>Shrink Image</h1>
+            <p class="lead">
+               This function takes an and shrinks it by half the height and width, resulting in a picture 1/4th of the original size. This
+               one actually was complicated to troubleshoot because I happened to use an even height x width picture while developing it and
+               then when I went to use it later as part of a larger program with an odd height I spent a while trying to figure out what my error was
+               in the new code when it ended up being in this function! So I had to spend an hour or so revisiting what was wrong with this simple seeming function. 
+               Please note this website uses responsive images so depending on your viewpoint, the difference may not seem completely half.
+            </p>
+             <div class="row">
+               <div class="col-xs-12 col-md-6">
+                  <h2>Before Picture:</h2>
+                  <img src="images/shrink-before.jpg" class="img-responsive img-thumbnail" alt="Before Image - Shrink">               
+               </div> 
+               <div class="col-xs-12 col-md-6">
+                 <h2>After Picture:</h2>
+                  <img src="images/shrink-after.jpg" class="img-responsive img-thumbnail" alt="After Image - Shrink">               
+               </div>
+             </div> 
+             <div class="row">
+                <h2>Code:</h2> 
+                <pre class="pre-scrollable">
+                  def shrink(picture):
+                  #edited to take into account dimensions both even and odd
+                  #adding .5 and making an int to simulate math.ceil since we haven't learned  
+                  #that yet but I believe that's what I would be using here otherwise
+                    width = int(getWidth(picture)/2.0 +.5)
+                    height = int(getHeight(picture)/2.0 +.5)
+                    newPic = makeEmptyPicture(width, height)
+                    for x in range (0, getWidth(picture), 2):
+                      for y in range (0, getHeight(picture), 2):
+                        setColor(getPixel(newPic, x/2, y/2), getColor(getPixel(picture, x, y)))
+                    show(newPic)
+                    return newPic
+                </pre>
+             </div>
+           </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>
+               &middot; Made with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by Talanda featuring <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> &middot;
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
